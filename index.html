@@ -941,6 +941,8 @@
         if (!contactForm.reportValidity()) return;
         const submitButton = contactForm.querySelector('button[type="submit"]');
         const payload = Object.fromEntries(new FormData(contactForm).entries());
+        // A FormSubmit a pontos űrlap-URL-t is kéri bizonyos böngésző/referrer beállításoknál.
+        payload._url = window.location.href.split('#')[0];
         contactStatus.textContent = 'Üzenet küldése folyamatban…';
         contactStatus.classList.remove('error');
         submitButton.disabled = true;
@@ -951,16 +953,24 @@
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify(payload)
           });
+          const responseText = await response.text();
           let result = {};
-          try { result = await response.json(); } catch (_) { /* a hibát lent kezeljük */ }
+          try { result = responseText ? JSON.parse(responseText) : {}; } catch (_) {
+            throw new Error(`A szolgáltató nem értelmezhető választ adott (HTTP ${response.status}).`);
+          }
           if (!response.ok || String(result.success).toLowerCase() !== 'true') {
-            throw new Error(result.message || 'Az üzenetküldés most nem sikerült.');
+            throw new Error(result.message || result.error || `A szolgáltató elutasította a küldést (HTTP ${response.status}).`);
           }
           contactStatus.textContent = 'Köszönjük! Az üzenetedet a rendszer fogadta. Hamarosan felvesszük veled a kapcsolatot.';
           contactForm.reset();
         } catch (error) {
           console.error('Kapcsolatfelvételi űrlap hiba:', error);
-          contactStatus.textContent = 'Az üzenetküldés most nem sikerült. Kérjük, próbáld újra később, vagy írj közvetlenül a djattila112@gmail.com címre.';
+          const detail = String(error && error.message || 'Ismeretlen hiba');
+          if (/failed to fetch|networkerror|load failed|cors/i.test(detail)) {
+            contactStatus.textContent = 'Nem sikerült elérni az üzenetküldő szolgáltatást. Ellenőrizd az internetkapcsolatot, majd próbáld újra. Ha továbbra sem működik, írj közvetlenül a djattila112@gmail.com címre.';
+          } else {
+            contactStatus.textContent = `Az üzenetküldő szolgáltatás ezt jelezte: ${detail} Kérjük, ellenőrizd, hogy a FormSubmit aktiváló e-mailjét megerősítetted-e. Ha nem sikerül, írj közvetlenül a djattila112@gmail.com címre.`;
+          }
           contactStatus.classList.add('error');
         } finally {
           submitButton.disabled = false;
