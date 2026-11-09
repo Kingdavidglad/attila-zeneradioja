@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080d19">
   <meta name="description" content="Attila Zenerádiója – online rádió Dance, Rap, Rock és House zenékkel. Hallgasd élőben!">
-  <title>Attila Zenerádiója - A zene, ami veled marad</title>
+  <title>Attila Zenerádiója — A zene, ami veled marad</title>
   <style>
     :root {
       --ink: #090e19;
@@ -238,7 +238,15 @@
     .field textarea { min-height: 108px; resize: vertical; }
     .field input:focus,.field textarea:focus { border-color: #39dce9; }
     .send-button { justify-self: start; display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border: 0; border-radius: 999px; color: #07131d; background: linear-gradient(105deg,#35e3e9,#5b79ff); font-size: 11px; font-weight: 900; letter-spacing: .7px; text-transform: uppercase; }
-    .form-note { grid-column: 1/-1; margin: -2px 0 0; color: #7f8ca4; font-size: 10px; }
+    .form-note { grid-column: 1/-1; margin: -2px 0 0; color: #7f8ca4; font-size: 10px; line-height: 1.6; }
+    .form-note a { color: #65e8f0; text-decoration: underline; text-underline-offset: 3px; }
+    .form-status { grid-column: 1/-1; min-height: 20px; margin: 0; color: #bdeff2; font-size: 12px; line-height: 1.5; }
+    .form-status.error { color: #ffaaa5; }
+    .form-consent { grid-column: 1/-1; display: flex; align-items: flex-start; gap: 9px; color: #aeb8ca; font-size: 11px; line-height: 1.55; }
+    .form-consent input { flex: 0 0 auto; width: 16px; height: 16px; margin-top: 1px; accent-color: #39dce9; }
+    .form-consent a { color: #65e8f0; text-decoration: underline; text-underline-offset: 3px; }
+    .send-button:disabled { opacity: .6; cursor: wait; }
+    .contact-honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
     footer { padding: 22px 0 26px; color: #929caf; background: #050911; font-size: 10px; }
     .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
     .footer-links { display: flex; gap: 20px; }
@@ -423,7 +431,7 @@
           <svg class="hero-mark" viewBox="0 0 140 140" fill="none" aria-hidden="true"><defs><linearGradient id="heroGrad" x1="12" y1="12" x2="127" y2="127" gradientUnits="userSpaceOnUse"><stop stop-color="#28e9f0"/><stop offset=".5" stop-color="#427bff"/><stop offset="1" stop-color="#c849ff"/></linearGradient></defs><circle cx="65" cy="65" r="48" stroke="url(#heroGrad)" stroke-width="14" stroke-linecap="round" stroke-dasharray="245 65" transform="rotate(-42 65 65)"/><path d="M96 36a37 37 0 1 0 9 42" stroke="url(#heroGrad)" stroke-width="13" stroke-linecap="round"/><circle cx="117" cy="116" r="9" fill="#ba4cff"/></svg>
           <h1>ATTILA<span>ZENERÁDIÓJA</span></h1>
         </div>
-        <p class="hero-lead">A kedvenc ritmusaid egy helyen. Friss slágerek, jól ismert klasszikusok és változatos zenei világ - bárhol is vagy, a zene veled lehet.</p>
+        <p class="hero-lead">A kedvenc ritmusaid egy helyen. Friss slágerek, jól ismert klasszikusok és változatos zenei világ — bárhol is vagy, a zene veled lehet.</p>
         <div class="hero-actions">
           <button class="hero-listen" id="heroPlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><path d="m8 5 11 7-11 7z"/></svg> RÁDIÓ INDÍTÁSA</button>
           <div class="hero-now"><span class="hero-now-disc"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7"><path d="M4 15V9m4 10V5m4 14V3m4 16V7m4 12v-9"/></svg></span><span><b>Élő online adás</b><small>Attila Zenerádiója • nonstop zenei élmény</small></span></div>
@@ -540,20 +548,25 @@
   <section class="contact" id="kapcsolat">
     <div class="wrap contact-grid">
       <div class="contact-copy"><span class="section-kicker">Kapcsolat</span><h2 class="contact-title">Van egy jó ötleted?</h2><p>Kérdésed, észrevételed van, vagy kapcsolatba lépnél a rádióval? Írj nekünk az alábbi űrlapon keresztül.</p><a class="contact-email" href="mailto:djattila112@gmail.com">djattila112@gmail.com</a></div>
-      <form class="contact-form" id="contactForm">
+      <form class="contact-form" id="contactForm" action="https://formsubmit.co/djattila112@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Új üzenet – Attila Zenerádiója">
+        <input type="hidden" name="_template" value="table">
+        <div class="contact-honeypot" aria-hidden="true"><label for="contactWebsite">Ezt a mezőt hagyd üresen</label><input id="contactWebsite" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
         <div class="field"><label for="name">Név *</label><input id="name" name="name" autocomplete="name" required placeholder="A neved"></div>
         <div class="field"><label for="email">E-mail *</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="nev@email.hu"></div>
         <div class="field"><label for="phone">Telefonszám *</label><input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="Telefonszámod"></div>
         <div class="field full"><label for="message">Üzenet *</label><textarea id="message" name="message" required placeholder="Miben segíthetünk?"></textarea></div>
-        <button class="send-button" type="submit">Üzenet előkészítése ↗</button>
-        <p class="form-note">Az űrlap az alapértelmezett levelezőprogramodban készíti elő az üzenetet; a weboldal önmagában nem tárolja az adatokat.</p>
+        <label class="form-consent"><input type="checkbox" name="data_processing_consent" value="Elfogadom" required><span>Hozzájárulok, hogy az üzenet elküldéséhez a megadott adataimat a FormSubmit külső szolgáltatás feldolgozza. Elolvastam a <a href="https://formsubmit.co/privacy.pdf" target="_blank" rel="noopener noreferrer">FormSubmit adatvédelmi tájékoztatóját</a>.</span></label>
+        <button class="send-button" type="submit">Üzenet küldése ↗</button>
+        <p class="form-status" id="contactFormStatus" role="status" aria-live="polite"></p>
+        <p class="form-note">Az üzenet közvetlenül az űrlapkezelő szolgáltatáson keresztül érkezik meg a rádió e-mail-címére. A FormSubmit az elküldött űrlapadatokat legfeljebb 30 napig őrzi meg. <a href="https://formsubmit.co/documentation" target="_blank" rel="noopener noreferrer">Részletek</a>.</p>
       </form>
     </div>
   </section>
 
   <section class="legal" aria-label="Jogi információk">
     <div class="wrap">
-      <details><summary>Adatkezelési tájékoztató</summary><p>Az adatkezelő megnevezése: Attila Zenerádiója. Kapcsolat: djattila112@gmail.com. A kapcsolatfelvételi űrlapon megadott név, e-mail-cím és telefonszám kizárólag a kapcsolatfelvétel céljából kerülhet felhasználásra. Az űrlap ezen a weboldalon nem küld automatikusan adatot szerverre: az üzenetet a látogató saját levelezőprogramja készíti elő. Az adatkezelési tájékoztató eredeti weboldalon közzétett változatának részleteit az élesítés előtt érdemes jogilag felülvizsgálni.</p></details>
+      <details><summary>Adatkezelési tájékoztató</summary><p>Az adatkezelő megnevezése: Attila Zenerádiója. Kapcsolat: djattila112@gmail.com. A kapcsolatfelvételi űrlapon megadott név, e-mail-cím, telefonszám és üzenet a megkeresés megválaszolása céljából kerül továbbításra a FormSubmit külső űrlapkezelő szolgáltatás részére, amely e-mailben továbbítja az adatokat a rádió kapcsolati címére. A FormSubmit tájékoztatója szerint az űrlapbeküldéseket 30 napig őrzi meg. A szolgáltató adatvédelmi tájékoztatója: <a href="https://formsubmit.co/privacy.pdf" target="_blank" rel="noopener noreferrer">formsubmit.co/privacy.pdf</a>. A rádió üzemeltetője felelős a saját adatkezelési gyakorlatának, jogalapjának, megőrzési idejének és teljes adatkezelési tájékoztatójának pontos meghatározásáért; a jelen szöveget élesítés előtt ellenőrizni és szükség szerint kiegészíteni kell.</p></details>
       <details><summary>Felhasználási feltételek</summary><p>Az Attila Zenerádiója online rádiószolgáltatást nyújt hallgatóinak. A műsorszámok, hanganyagok és előadások szerzői jogvédelem alatt állnak. Az adás rögzítése, másolása, terjesztése vagy újraközvetítése a jogosult engedélye nélkül nem megengedett. A szolgáltatás folyamatosságáért a rádió mindent megtesz, de technikai kimaradások előfordulhatnak. Hatályos szöveg: a jelenlegi weboldalon közzétett feltételek szerint.</p></details>
       <details><summary>Impresszum</summary><p>Az impresszumhoz szükséges hivatalos üzemeltetői adatokat a jelenlegi weboldal nem tartalmazza. Ezeket a közzététel előtt az üzemeltetőnek kell megadnia.</p></details>
     </div>
@@ -921,12 +934,38 @@
         }
       });
       document.getElementById('year').textContent = new Date().getFullYear();
-      document.getElementById('contactForm').addEventListener('submit', event => {
+      const contactForm = document.getElementById('contactForm');
+      const contactStatus = document.getElementById('contactFormStatus');
+      contactForm.addEventListener('submit', async event => {
         event.preventDefault();
-        const form = new FormData(event.currentTarget);
-        const subject = encodeURIComponent('Kapcsolatfelvétel – Attila Zenerádiója');
-        const body = encodeURIComponent(`Név: ${form.get('name')}\nE-mail: ${form.get('email')}\nTelefonszám: ${form.get('phone')}\n\nÜzenet:\n${form.get('message')}`);
-        window.location.href = `mailto:djattila112@gmail.com?subject=${subject}&body=${body}`;
+        if (!contactForm.reportValidity()) return;
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const payload = Object.fromEntries(new FormData(contactForm).entries());
+        contactStatus.textContent = 'Üzenet küldése folyamatban…';
+        contactStatus.classList.remove('error');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Küldés…';
+        try {
+          const response = await fetch('https://formsubmit.co/ajax/djattila112@gmail.com', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          let result = {};
+          try { result = await response.json(); } catch (_) { /* a hibát lent kezeljük */ }
+          if (!response.ok || String(result.success).toLowerCase() !== 'true') {
+            throw new Error(result.message || 'Az üzenetküldés most nem sikerült.');
+          }
+          contactStatus.textContent = 'Köszönjük! Az üzenetedet a rendszer fogadta. Hamarosan felvesszük veled a kapcsolatot.';
+          contactForm.reset();
+        } catch (error) {
+          console.error('Kapcsolatfelvételi űrlap hiba:', error);
+          contactStatus.textContent = 'Az üzenetküldés most nem sikerült. Kérjük, próbáld újra később, vagy írj közvetlenül a djattila112@gmail.com címre.';
+          contactStatus.classList.add('error');
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Üzenet küldése ↗';
+        }
       });
     })();
   </script>
