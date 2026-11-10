@@ -985,6 +985,7 @@
       const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Jv8o9ynQmAwctARbKF3HhQ_ObEClAPF';
       const CONTACT_FUNCTION_URL = `${SUPABASE_PROJECT_URL}/functions/v1/contact-message`;
       const RADIO_STATS_FUNCTION_URL = `${SUPABASE_PROJECT_URL}/functions/v1/radio-stats`;
+      const ATTILA_RADIO_STATS_FUNCTION_URL = `${SUPABASE_PROJECT_URL}/functions/v1/radio-stats-attila`;
       const listenerStatsUpdated = document.getElementById('listenerStatsUpdated');
       let listenerStatsInFlight = false;
 
@@ -998,18 +999,17 @@
         label.textContent = valid ? 'HALLGATÓ' : 'NEM ELÉRHETŐ';
         counter.classList.toggle('is-loading', false);
         counter.classList.toggle('is-unavailable', !valid);
+        const channelName = channel === 'live' ? 'LIVE' : channel === 'autodj' ? 'Diazol AutoDJ' : 'Attila AutoDJ';
         counter.title = valid
-          ? `${value.textContent} hallgató csatlakozik a ${channel === 'live' ? 'LIVE' : 'AutoDJ'} streamhez.`
-          : 'A rádiószerver hallgatottsági adata most nem érhető el.';
+          ? `${value.textContent} hallgató csatlakozik a ${channelName} streamhez.`
+          : `${channelName}: a hallgatottsági adat most nem érhető el.`;
       }
 
-      async function refreshListenerStats() {
-        if (listenerStatsInFlight || document.visibilityState === 'hidden') return;
-        listenerStatsInFlight = true;
+      async function fetchListenerPayload(url, timeoutMs = 8000) {
         const controller = new AbortController();
-        const timeoutId = window.setTimeout(() => controller.abort(), 9000);
+        const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
         try {
-          const response = await fetch(`${RADIO_STATS_FUNCTION_URL}?_=${Date.now()}`, {
+          const response = await fetch(`${url}?_=${Date.now()}`, {
             method: 'GET',
             mode: 'cors',
             cache: 'no-store',
@@ -1018,22 +1018,51 @@
             signal: controller.signal
           });
           let payload = {};
-          try { payload = await response.json(); } catch (_) { throw new Error(`A hallgatottsági szolgáltatás nem JSON választ adott (HTTP ${response.status}).`); }
+          try { payload = await response.json(); }
+          catch (_) { throw new Error(`A hallgatottsági szolgáltatás nem JSON választ adott (HTTP ${response.status}).`); }
           if (!response.ok) throw new Error(payload.message || `A hallgatottsági lekérés HTTP ${response.status} hibát adott.`);
-          setListenerCounter('live', payload.live?.listeners, payload.live?.available === true);
-          setListenerCounter('autodj', payload.autodj?.listeners, payload.autodj?.available === true);
-          setListenerCounter('attilaAutoDJ', payload.attilaAutoDJ?.listeners, payload.attilaAutoDJ?.available === true);
-          const updated = payload.updatedAt ? new Date(payload.updatedAt) : new Date();
-          const time = new Intl.DateTimeFormat('hu-HU', { timeZone: 'Europe/Budapest', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(updated);
-          listenerStatsUpdated.textContent = `Élő szerveradatok · frissítve: ${time} · automatikus frissítés 5 másodpercenként`;
-        } catch (error) {
-          setListenerCounter('live', null, false);
-          setListenerCounter('autodj', null, false);
-          setListenerCounter('attilaAutoDJ', null, false);
-          listenerStatsUpdated.textContent = 'A hallgatottsági adatok most nem érhetők el. Ellenőrizni kell a Supabase radio-stats funkciót.';
-          console.warn('Attila Zenerádiója hallgatottsági lekérés sikertelen:', error);
+          return payload;
         } finally {
           window.clearTimeout(timeoutId);
+        }
+      }
+
+      async function refreshListenerStats() {
+        if (listenerStatsInFlight || document.visibilityState === 'hidden') return;
+        listenerStatsInFlight = true;
+        try {
+          // A meglévő, bevált Diazol-funkció külön fut. Az új Attila státuszlekérés
+          // hibája nem ronthatja el a már működő LIVE és AutoDJ számlálókat.
+          const [diazolResult, attilaResult] = await Promise.allSettled([
+            fetchListenerPayload(RADIO_STATS_FUNCTION_URL, 8000),
+            fetchListenerPayload(ATTILA_RADIO_STATS_FUNCTION_URL, 8000)
+          ]);
+
+          if (diazolResult.status === 'fulfilled') {
+            const payload = diazolResult.value;
+            setListenerCounter('live', payload.live?.listeners, payload.live?.available === true);
+            setListenerCounter('autodj', payload.autodj?.listeners, payload.autodj?.available === true);
+          } else {
+            setListenerCounter('live', null, false);
+            setListenerCounter('autodj', null, false);
+            console.warn('A meglévő Diazol hallgatottsági lekérés sikertelen:', diazolResult.reason);
+          }
+
+          if (attilaResult.status === 'fulfilled') {
+            const payload = attilaResult.value;
+            setListenerCounter('attilaAutoDJ', payload.attilaAutoDJ?.listeners, payload.attilaAutoDJ?.available === true);
+          } else {
+            setListenerCounter('attilaAutoDJ', null, false);
+            console.warn('Attila AutoDJ hallgatottsági lekérés sikertelen:', attilaResult.reason);
+          }
+
+          const time = new Intl.DateTimeFormat('hu-HU', {
+            timeZone: 'Europe/Budapest', hour: '2-digit', minute: '2-digit', second: '2-digit'
+          }).format(new Date());
+          const diazolState = diazolResult.status === 'fulfilled' ? 'Diazol adatok rendben' : 'Diazol adat nem elérhető';
+          const attilaState = attilaResult.status === 'fulfilled' ? 'Attila AutoDJ ellenőrizve' : 'Attila AutoDJ adat nem elérhető';
+          listenerStatsUpdated.textContent = `${diazolState} · ${attilaState} · frissítve: ${time} · frissítés 5 másodpercenként`;
+        } finally {
           listenerStatsInFlight = false;
         }
       }
