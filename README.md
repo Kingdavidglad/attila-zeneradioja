@@ -1,27 +1,30 @@
-# Attila Zenerádiója – két lejátszóval és napi névnapi sávval
+# Attila Zenerádiója – közvetlen kapcsolatfelvételi űrlappal
 
-A weboldal fájljai:
+## Fájlok
 - `index.html`
 - `assets/hero-concert.webp`
 
-## Telepítés
-A ZIP teljes tartalmát töltsd fel a webtárhelyre úgy, hogy az `index.html` mellett az `assets` mappa is megmaradjon.
+## Telepítés GitHub Pages-re
+A ZIP teljes tartalmát töltsd fel az új repository gyökérkönyvtárába. Az `index.html` a gyökérbe kerüljön, az `assets` mappa pedig maradjon mellette.
 
-## Rádiólejátszók
-- Élő adás: `http://s02.diazol.hu:8130/live`
-- AutoDJ: `http://s02.diazol.hu:8130/autodj`
+## Kapcsolatfelvétel
+A kapcsolatfelvételi űrlap a FormSubmit AJAX végpontját használja, így a látogatónak nem kell megnyitnia a levelezőprogramját, és az oldalon marad az elküldés közben.
+Célcím: `djattila112@gmail.com`.
 
-A két lejátszó külön vezérelhető, de egyszerre csak az egyik szól: a másik automatikusan megáll, amikor elindítod az új csatornát.
+### Egyszeri aktiválás közzététel után
+1. A GitHub Pages-en közzétett oldalon küldj egy próbaüzenetet az űrlappal.
+2. A FormSubmit aktiváló e-mailt küld a `djattila112@gmail.com` címre.
+3. Nyisd meg ezt az e-mailt, és kattints a megerősítő/aktiváló hivatkozásra.
+4. Ezután az űrlap beküldései közvetlenül az e-mail-címre érkeznek.
 
-## Automatikus indítás
-Az oldal megnyitásakor a weboldal megpróbálja automatikusan elindítani a LIVE adást. A hanggal történő automatikus indítást a böngészők gyakran letiltják, amíg a látogató nem kattint vagy érint meg valamit. Ilyenkor egy jól látható indítósáv jelenik meg két választással: LIVE indítása vagy AutoDJ indítása. A weboldal ezt a böngészőkorlátozást nem tudja megkerülni.
+A FormSubmit első használatkor e-mailes címmegerősítést kér. A megerősítés előtt az éles üzenetkézbesítés nem tekinthető aktiváltnak.
 
-## Napi névnapi sáv
-- A felső, folyamatosan gördülő sáv a `https://www.nevinfo.hu/api/v1/ma` végpontról tölti be a napi magyar névnapokat.
-- A dátumot `Europe/Budapest` időzónában ellenőrzi.
-- A lekérdezett adatot a böngésző helyben eltárolja, és ugyanazon a napon nem kérdezi le újra feleslegesen.
-- Ha az oldal nyitva marad éjfélkor, legfeljebb egy percen belül frissíti a névnapokat.
-- Ha a névnap API átmenetileg nem elérhető, az aznapi, korábban mentett adatot használja.
+A szolgáltatás dokumentációja: https://formsubmit.co/documentation
+AJAX dokumentáció: https://formsubmit.co/ajax-documentation
+Adatvédelmi tájékoztató: https://formsubmit.co/privacy.pdf
 
-## Fontos: HTTPS stream
-Ha a weboldal HTTPS-címen fut, a böngészők a HTTP audio streamet HTTPS-re próbálják átállítani, és nem töltenek vissza HTTP-re, ha az SSL stream nem érhető el. Emiatt a tárhelyszolgáltatónál / stream szolgáltatónál ellenőrizni kell, hogy a két csatolási ponthoz elérhető-e HTTPS stream is. A konkrét stream lejátszását közzététel előtt böngészőben tesztelni kell.
+## Adatvédelem
+Az űrlap a nevet, e-mail-címet, telefonszámot és üzenetet külső szolgáltatáson keresztül továbbítja. A FormSubmit a dokumentációja szerint a beküldéseket 30 napig őrzi meg. Az oldal tájékoztatást és hozzájáruló jelölőnégyzetet tartalmaz, de az üzemeltetőnek közzététel előtt ellenőriznie kell és ki kell egészítenie a teljes adatkezelési tájékoztatót a saját adatkezelési gyakorlatának megfelelően.
+
+## Megjegyzés
+A kapcsolatfelvételi e-mail-cím a korábban használt `djattila112@gmail.com`. Ha másik címre kell érkezniük az üzeneteknek, az `index.html` fájlban a `formsubmit.co` végpont mindkét előfordulását cserélni kell.
