@@ -1,6 +1,6 @@
-// Attila Zenerádiója – valós Icecast hallgatottsági adatok.
-// A böngésző csak ezt a publikus, olvasási célú Supabase Edge Functiont hívja.
-// A Diazol Icecast szerver status-json.xsl végpontjából olvassa a /live és /autodj mountokat.
+// Attila Zenerádiója – valós hallgatottsági adatok.
+// A két Diazol csatorna Icecast JSON statisztikáját és a külső AutoDJ
+// nyilvános status.xsl oldalát olvassa. A böngésző csak ezt a funkciót hívja.
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -9,12 +9,12 @@ const corsHeaders = {
   "Access-Control-Max-Age": "86400",
 };
 
-// Elsődleges: a weboldal által is használt HTTPS/Port+2 cím.
-// Tartalék: a sima HTTP státuszvégpont, amelyet kizárólag a szerveroldali Edge Function kér le.
 const STATS_URLS = [
   "https://s02.diazol.hu:8132/status-json.xsl",
   "http://s02.diazol.hu:8130/status-json.xsl",
 ];
+
+const ATTILA_STATUS_URL = "http://attilazeneradioja.ddns.net:28888/status.xsl";
 
 function jsonResponse(payload: unknown, status = 200, cacheSeconds = 4) {
   return new Response(JSON.stringify(payload), {
@@ -22,7 +22,7 @@ function jsonResponse(payload: unknown, status = 200, cacheSeconds = 4) {
     headers: {
       ...corsHeaders,
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": `public, max-age=${cacheSeconds}, s-maxage=${cacheSeconds}`,
+      "Cache-Control": "public, max-age=" + cacheSeconds + ", s-maxage=" + cacheSeconds,
     },
   });
 }
@@ -69,7 +69,7 @@ async function loadIcecastStats() {
 
   for (const url of STATS_URLS) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
+    const timeout = setTimeout(() => controller.abort(), 7000);
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -77,7 +77,7 @@ async function loadIcecastStats() {
         cache: "no-store",
         signal: controller.signal,
       });
-      if (!response.ok) throw new Error(`Icecast stats HTTP ${response.status}`);
+      if (!response.ok) throw new Error("Icecast stats HTTP " + response.status);
 
       const payload = await response.json();
       const sources = normalizeSources(payload);
@@ -86,13 +86,81 @@ async function loadIcecastStats() {
       return { sources, endpoint: url };
     } catch (error) {
       lastError = error;
-      console.warn(`Icecast státuszlekérés nem sikerült (${url}):`, error);
+      console.warn("Diazol státuszlekérés sikertelen (" + url + "):", error);
     } finally {
       clearTimeout(timeout);
     }
   }
 
   throw lastError;
+}
+
+function htmlToPlainText(html: string): string {
+  return html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;|&#160;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&colon;/gi, ":")
+    .replace(/&#(\d+);/g, (_match, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_match, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getMountListenersFromStatus(html: string, mount: string): number | null {
+  const text = htmlToPlainText(html);
+  const markers = [...text.matchAll(/Mount\s*Point\s*:/gi)];
+
+  for (let index = 0; index < markers.length; index++) {
+    const start = markers[index].index ?? 0;
+    const end = markers[index + 1]?.index ?? text.length;
+    const section = text.slice(start, end);
+
+    if (!section.toLowerCase().includes(mount.toLowerCase())) continue;
+
+    const match = section.match(/Current\s*Listeners\s*:\s*([0-9,]+)/i);
+    if (!match) return null;
+
+    const count = Number(match[1].replace(/,/g, ""));
+    return Number.isFinite(count) && count >= 0 ? Math.floor(count) : null;
+  }
+
+  return null;
+}
+
+async function loadAttilaAutoDJStats(): Promise<number> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6500);
+
+  try {
+    const response = await fetch(ATTILA_STATUS_URL, {
+      method: "GET",
+      headers: {
+        "Accept": "text/html,application/xhtml+xml,*/*",
+        "User-Agent": "AttilaRadio-ListenerStats/1.0",
+      },
+      cache: "no-store",
+      redirect: "follow",
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error("Attila status.xsl HTTP " + response.status);
+    }
+
+    const html = await response.text();
+    const listeners = getMountListenersFromStatus(html, "/autodj");
+
+    if (listeners === null) {
+      throw new Error("A status.xsl oldalról nem olvasható ki az /autodj Current Listeners értéke.");
+    }
+
+    return listeners;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 Deno.serve(async (req: Request) => {
@@ -104,12 +172,26 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { sources } = await loadIcecastStats();
+    const [diazolResult, attilaResult] = await Promise.allSettled([
+      loadIcecastStats(),
+      loadAttilaAutoDJStats(),
+    ]);
+
+    if (diazolResult.status !== "fulfilled") {
+      throw diazolResult.reason;
+    }
+
+    const sources = diazolResult.value.sources;
     const liveSource = sources.find((source) => getMountPath(source) === "/live");
     const autodjSource = sources.find((source) => getMountPath(source) === "/autodj");
 
     const liveListeners = getListenerCount(liveSource);
     const autodjListeners = getListenerCount(autodjSource);
+    const attilaListeners = attilaResult.status === "fulfilled" ? attilaResult.value : null;
+
+    if (attilaResult.status === "rejected") {
+      console.warn("Attila AutoDJ hallgatottsági adat most nem érhető el:", attilaResult.reason);
+    }
 
     return jsonResponse({
       live: {
@@ -122,13 +204,19 @@ Deno.serve(async (req: Request) => {
         available: autodjListeners !== null,
         listeners: autodjListeners,
       },
+      attilaAutoDJ: {
+        mount: "/autodj",
+        source: ATTILA_STATUS_URL,
+        available: attilaListeners !== null,
+        listeners: attilaListeners,
+      },
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Attila Zenerádiója radio-stats hiba:", error);
     return jsonResponse({
       error: "RADIO_STATS_UNAVAILABLE",
-      message: "A Diazol Icecast hallgatottsági adatai most nem érhetők el.",
+      message: "A hallgatottsági adatok most nem érhetők el.",
     }, 502, 0);
   }
 });
