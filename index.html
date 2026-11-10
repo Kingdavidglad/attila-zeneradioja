@@ -548,25 +548,23 @@
   <section class="contact" id="kapcsolat">
     <div class="wrap contact-grid">
       <div class="contact-copy"><span class="section-kicker">Kapcsolat</span><h2 class="contact-title">Van egy jó ötleted?</h2><p>Kérdésed, észrevételed van, vagy kapcsolatba lépnél a rádióval? Írj nekünk az alábbi űrlapon keresztül.</p><a class="contact-email" href="mailto:djattila112@gmail.com">djattila112@gmail.com</a></div>
-      <form class="contact-form" id="contactForm" action="https://formsubmit.co/djattila112@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="Új üzenet – Attila Zenerádiója">
-        <input type="hidden" name="_template" value="table">
+      <form class="contact-form" id="contactForm" action="#" method="POST">
         <div class="contact-honeypot" aria-hidden="true"><label for="contactWebsite">Ezt a mezőt hagyd üresen</label><input id="contactWebsite" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
         <div class="field"><label for="name">Név *</label><input id="name" name="name" autocomplete="name" required placeholder="A neved"></div>
         <div class="field"><label for="email">E-mail *</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="nev@email.hu"></div>
         <div class="field"><label for="phone">Telefonszám *</label><input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="Telefonszámod"></div>
         <div class="field full"><label for="message">Üzenet *</label><textarea id="message" name="message" required placeholder="Miben segíthetünk?"></textarea></div>
-        <label class="form-consent"><input type="checkbox" name="data_processing_consent" value="Elfogadom" required><span>Hozzájárulok, hogy az üzenet elküldéséhez a megadott adataimat a FormSubmit külső szolgáltatás feldolgozza. Elolvastam a <a href="https://formsubmit.co/privacy.pdf" target="_blank" rel="noopener noreferrer">FormSubmit adatvédelmi tájékoztatóját</a>.</span></label>
+        <label class="form-consent"><input type="checkbox" name="data_processing_consent" value="Elfogadom" required><span>Hozzájárulok, hogy a megkeresésem megválaszolásához a megadott adataimat az Attila Zenerádiója a Supabase rendszerén keresztül feldolgozza és tárolja. Elolvastam az <a href="#adatkezeles">adatkezelési tájékoztatót</a>.</span></label>
         <button class="send-button" type="submit">Üzenet küldése ↗</button>
         <p class="form-status" id="contactFormStatus" role="status" aria-live="polite"></p>
-        <p class="form-note">Az üzenet közvetlenül az űrlapkezelő szolgáltatáson keresztül érkezik meg a rádió e-mail-címére. A FormSubmit az elküldött űrlapadatokat legfeljebb 30 napig őrzi meg. <a href="https://formsubmit.co/documentation" target="_blank" rel="noopener noreferrer">Részletek</a>.</p>
+        <p class="form-note">Az üzenetet a rádió saját Supabase-rendszere biztonságosan tárolja. Az e-mail-értesítés a feladói domain hitelesítése és a Resend beállítása után működik.</p>
       </form>
     </div>
   </section>
 
   <section class="legal" aria-label="Jogi információk">
     <div class="wrap">
-      <details><summary>Adatkezelési tájékoztató</summary><p>Az adatkezelő megnevezése: Attila Zenerádiója. Kapcsolat: djattila112@gmail.com. A kapcsolatfelvételi űrlapon megadott név, e-mail-cím, telefonszám és üzenet a megkeresés megválaszolása céljából kerül továbbításra a FormSubmit külső űrlapkezelő szolgáltatás részére, amely e-mailben továbbítja az adatokat a rádió kapcsolati címére. A FormSubmit tájékoztatója szerint az űrlapbeküldéseket 30 napig őrzi meg. A szolgáltató adatvédelmi tájékoztatója: <a href="https://formsubmit.co/privacy.pdf" target="_blank" rel="noopener noreferrer">formsubmit.co/privacy.pdf</a>. A rádió üzemeltetője felelős a saját adatkezelési gyakorlatának, jogalapjának, megőrzési idejének és teljes adatkezelési tájékoztatójának pontos meghatározásáért; a jelen szöveget élesítés előtt ellenőrizni és szükség szerint kiegészíteni kell.</p></details>
+      <details id="adatkezeles"><summary>Adatkezelési tájékoztató</summary><p>Az adatkezelő megnevezése: Attila Zenerádiója. Kapcsolat: djattila112@gmail.com. A kapcsolatfelvételi űrlapon megadott név, e-mail-cím, telefonszám és üzenet a megkeresés megválaszolása céljából kerül feldolgozásra és tárolásra a rádió saját Supabase-projektjében. A rendszer szerveroldali Supabase Edge Functiont használ; a rádió e-mail-értesítéshez Resend szolgáltatást is igénybe vehet. Az adatokhoz való hozzáférés korlátozott, a látogatók nem férhetnek hozzá mások üzeneteihez. Az adatkezelés jogalapját, a pontos megőrzési időt, az érintetti jogok gyakorlásának módját és az adatfeldolgozók részletes adatait az üzemeltetőnek kell véglegesítenie és szükség esetén kiegészítenie. Kapcsolat adatkezelési kérdésekben: djattila112@gmail.com.</p></details>
       <details><summary>Felhasználási feltételek</summary><p>Az Attila Zenerádiója online rádiószolgáltatást nyújt hallgatóinak. A műsorszámok, hanganyagok és előadások szerzői jogvédelem alatt állnak. Az adás rögzítése, másolása, terjesztése vagy újraközvetítése a jogosult engedélye nélkül nem megengedett. A szolgáltatás folyamatosságáért a rádió mindent megtesz, de technikai kimaradások előfordulhatnak. Hatályos szöveg: a jelenlegi weboldalon közzétett feltételek szerint.</p></details>
       <details><summary>Impresszum</summary><p>Az impresszumhoz szükséges hivatalos üzemeltetői adatokat a jelenlegi weboldal nem tartalmazza. Ezeket a közzététel előtt az üzemeltetőnek kell megadnia.</p></details>
     </div>
@@ -936,40 +934,74 @@
       document.getElementById('year').textContent = new Date().getFullYear();
       const contactForm = document.getElementById('contactForm');
       const contactStatus = document.getElementById('contactFormStatus');
+      const SUPABASE_PROJECT_URL = 'https://qhyfhhkpeysdudnocqyd.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Jv8o9ynQmAwctARbKF3HhQ_ObEClAPF';
+      const CONTACT_FUNCTION_URL = `${SUPABASE_PROJECT_URL}/functions/v1/contact-message`;
+
       contactForm.addEventListener('submit', async event => {
         event.preventDefault();
         if (!contactForm.reportValidity()) return;
+
         const submitButton = contactForm.querySelector('button[type="submit"]');
-        const payload = Object.fromEntries(new FormData(contactForm).entries());
-        // A FormSubmit a pontos űrlap-URL-t is kéri bizonyos böngésző/referrer beállításoknál.
-        payload._url = window.location.href.split('#')[0];
+        const formData = new FormData(contactForm);
+        const payload = {
+          name: String(formData.get('name') || '').trim(),
+          email: String(formData.get('email') || '').trim(),
+          phone: String(formData.get('phone') || '').trim(),
+          message: String(formData.get('message') || '').trim(),
+          consent: formData.get('data_processing_consent') === 'Elfogadom',
+          honeypot: String(formData.get('_honey') || '')
+        };
+
         contactStatus.textContent = 'Üzenet küldése folyamatban…';
         contactStatus.classList.remove('error');
         submitButton.disabled = true;
         submitButton.textContent = 'Küldés…';
+
         try {
-          const response = await fetch('https://formsubmit.co/ajax/djattila112@gmail.com', {
+          const response = await fetch(CONTACT_FUNCTION_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_PUBLISHABLE_KEY
+            },
             body: JSON.stringify(payload)
           });
-          const responseText = await response.text();
+
           let result = {};
-          try { result = responseText ? JSON.parse(responseText) : {}; } catch (_) {
-            throw new Error(`A szolgáltató nem értelmezhető választ adott (HTTP ${response.status}).`);
+          try {
+            result = await response.json();
+          } catch (_) {
+            throw new Error(`A Supabase nem értelmezhető választ adott (HTTP ${response.status}).`);
           }
-          if (!response.ok || String(result.success).toLowerCase() !== 'true') {
-            throw new Error(result.message || result.error || `A szolgáltató elutasította a küldést (HTTP ${response.status}).`);
+
+          if (!response.ok || result.success !== true) {
+            const messages = {
+              INVALID_FIELDS: 'Kérjük, ellenőrizd a nevet, e-mail-címet, telefonszámot és az üzenetet.',
+              CONSENT_REQUIRED: 'Az üzenet elküldéséhez el kell fogadnod az adatkezelési tájékoztatót.',
+              RATE_LIMITED: 'Rövid időn belül túl sok üzenetet küldtél. Kérjük, próbáld újra később.',
+              ORIGIN_NOT_ALLOWED: 'Ez a webcím még nincs engedélyezve a Supabase-ben. Ellenőrizni kell az ALLOWED_ORIGINS beállítást.',
+              SERVER_NOT_CONFIGURED: 'Az üzenetküldő szerver beállítása hiányos. Kérjük, próbáld újra később.',
+              DATABASE_UNAVAILABLE: 'Az adatbázis átmenetileg nem érhető el.',
+              DATABASE_WRITE_FAILED: 'Az üzenetet most nem sikerült elmenteni.',
+              METHOD_NOT_ALLOWED: 'Az üzenetküldési kérés nem engedélyezett.'
+            };
+            throw new Error(messages[result.error] || 'Az üzenetküldés nem sikerült. Kérjük, próbáld újra később.');
           }
-          contactStatus.textContent = 'Köszönjük! Az üzenetedet a rendszer fogadta. Hamarosan felvesszük veled a kapcsolatot.';
+
+          if (result.emailSent === true) {
+            contactStatus.textContent = 'Köszönjük! Az üzenetedet sikeresen megkaptuk, és e-mailben is értesítést kaptunk róla.';
+          } else {
+            contactStatus.textContent = 'Köszönjük! Az üzeneted biztonságosan beérkezett és elmentésre került. Az e-mail-értesítés beállítása még folyamatban van.';
+          }
           contactForm.reset();
         } catch (error) {
-          console.error('Kapcsolatfelvételi űrlap hiba:', error);
+          console.error('Supabase kapcsolatfelvételi űrlap hiba:', error);
           const detail = String(error && error.message || 'Ismeretlen hiba');
           if (/failed to fetch|networkerror|load failed|cors/i.test(detail)) {
-            contactStatus.textContent = 'Nem sikerült elérni az üzenetküldő szolgáltatást. Ellenőrizd az internetkapcsolatot, majd próbáld újra. Ha továbbra sem működik, írj közvetlenül a djattila112@gmail.com címre.';
+            contactStatus.textContent = 'Nem sikerült kapcsolódni az üzenetküldő rendszerhez. Ellenőrizni kell a Supabase Edge Function CORS- és ALLOWED_ORIGINS-beállítását, majd próbáld újra.';
           } else {
-            contactStatus.textContent = `Az üzenetküldő szolgáltatás ezt jelezte: ${detail} Kérjük, ellenőrizd, hogy a FormSubmit aktiváló e-mailjét megerősítetted-e. Ha nem sikerül, írj közvetlenül a djattila112@gmail.com címre.`;
+            contactStatus.textContent = detail;
           }
           contactStatus.classList.add('error');
         } finally {
