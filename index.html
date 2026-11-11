@@ -240,6 +240,7 @@
     .schedule-intro p { max-width: 370px; color: #666c75; font-size: 13px; }
     .schedule-list { border-top: 1px solid #d5d6d8; }
     .schedule-row { display: grid; grid-template-columns: 125px 1fr auto; align-items: center; gap: 20px; padding: 24px 0; border-bottom: 1px solid #d5d6d8; }
+    .schedule-row.weekly { grid-template-columns: minmax(190px,.55fr) 1fr auto; }
     .schedule-time { color: #5e48c9; font-size: 12px; font-weight: 900; letter-spacing: .5px; }
     .schedule-row h3 { margin: 0; font-size: 20px; letter-spacing: -.04em; }
     .schedule-row p { margin: 3px 0 0; color: #747982; font-size: 11px; }
@@ -381,6 +382,10 @@
       .schedule-layout { grid-template-columns: 1fr; gap: 27px; }
       .schedule-intro { position: static; }
       .schedule-row { grid-template-columns: 90px 1fr; gap: 11px; padding: 17px 0; }
+      .schedule-row.weekly { grid-template-columns: 1fr auto; gap: 8px 11px; }
+      .schedule-row.weekly .schedule-time { grid-column: 1 / -1; }
+      .schedule-row.weekly .schedule-copy { grid-column: 1; }
+      .schedule-row.weekly .schedule-badge { grid-column: 2; }
       .schedule-badge { grid-column: 2; justify-self: start; }
       .schedule-row h3 { font-size: 17px; }
       .about-strip { grid-template-columns: 1fr; }
@@ -610,11 +615,26 @@
   <section class="schedule" id="musorrend">
     <div class="wrap schedule-layout">
       <div class="schedule-intro">
-        <span class="section-kicker">MINDEN NAP · 24 ÓRÁBAN</span>
+        <span class="section-kicker">HETI MŰSORREND · MINDEN NAP ZENE</span>
         <h2 class="schedule-title">Egy rádió. Egész nap.</h2>
-        <p>Kapcsolódj be reggeltől másnap hajnalig! Az Attila Zenerádiója műsorai végigkísérik a napodat, a reggeli ébredéstől az esti kikapcsolódásig.</p>
+        <p>Ismerd meg heti toplistáinkat és vasárnapi kívánságműsorunkat! A műsorokon kívül egész nap változatos zenékkel vár az Attila Zenerádiója.</p>
       </div>
-      <div class="schedule-list" aria-label="Napi műsorterv">
+      <div class="schedule-list" aria-label="Heti műsorrend és napi műsorterv">
+        <article class="schedule-row weekly">
+          <div class="schedule-time">HÉTFŐ · SZERDA · PÉNTEK</div>
+          <div class="schedule-copy"><h3>TOP 20</h3><p>A hét húsz legnépszerűbb dala egy toplistában.</p></div>
+          <span class="schedule-badge">TOPLISTA</span>
+        </article>
+        <article class="schedule-row weekly">
+          <div class="schedule-time">KEDD · CSÜTÖRTÖK · SZOMBAT</div>
+          <div class="schedule-copy"><h3>TOP 50</h3><p>Ötven sláger, a hallgatók kedvencei egy helyen.</p></div>
+          <span class="schedule-badge">TOPLISTA</span>
+        </article>
+        <article class="schedule-row weekly">
+          <div class="schedule-time">VASÁRNAP</div>
+          <div class="schedule-copy"><h3>Kívánságműsor</h3><p>Hallgatói kívánságok és kedvenc dalok vasárnaponként.</p></div>
+          <span class="schedule-badge">KÍVÁNSÁGOK</span>
+        </article>
         <article class="schedule-row">
           <div class="schedule-time">MINDEN NAP</div>
           <div><h3>Reggeli Ébresztő</h3><p>Indítsd a napot vidám hangulattal, lendületes zenékkel és friss dallamokkal!</p></div>
@@ -639,34 +659,6 @@
           <div class="schedule-time">MINDEN NAP</div>
           <div><h3>Esti műsor</h3><p>Estétől másnap reggelig zene és kikapcsolódás, hogy éjszaka se maradj kedvenc rádiód nélkül.</p></div>
           <span class="schedule-badge">18:00 – 06:00</span>
-          
-<article class="schedule-row">
-  <div class="schedule-time">HÉTFŐ · SZERDA · PÉNTEK</div>
-  <div>
-    <h3>TOP 20</h3>
-    <p>A hét legnagyobb kedvencei húszas listában.</p>
-  </div>
-  <span class="schedule-badge">TOPLISTA</span>
-</article>
-
-<article class="schedule-row">
-  <div class="schedule-time">KEDD · CSÜTÖRTÖK · SZOMBAT</div>
-  <div>
-    <h3>TOP 50</h3>
-    <p>A legnépszerűbb dalok ötvenes válogatásban.</p>
-  </div>
-  <span class="schedule-badge">TOPLISTA</span>
-</article>
-
-<article class="schedule-row">
-  <div class="schedule-time">VASÁRNAP</div>
-  <div>
-    <h3>Kívánságműsor</h3>
-    <p>Kedvenc dalok és hallgatói kívánságok.</p>
-  </div>
-  <span class="schedule-badge">KÍVÁNSÁGOK</span>
-</article>
-
         </article>
       </div>
     </div>
