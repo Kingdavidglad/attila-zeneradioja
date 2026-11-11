@@ -166,6 +166,14 @@
     .player-shell.external .visual-stage { min-height: 235px; }
     .player-shell.external .player-foot { grid-template-columns: minmax(190px,1fr) minmax(180px,1.2fr); }
     .external-stream-note { color: #aab5d0; font-size: 11px; line-height: 1.6; }
+    .now-playing { position:relative; z-index:1; display:flex; align-items:center; gap:12px; min-width:0; margin-top:13px; padding:11px 14px; border:1px solid rgba(105,205,255,.2); border-radius:14px; background:linear-gradient(110deg,rgba(39,190,221,.075),rgba(143,77,255,.075)); }
+    .now-playing-icon { width:34px; height:34px; flex:0 0 auto; display:grid; place-items:center; border:1px solid rgba(255,255,255,.12); border-radius:10px; color:#83eaff; background:rgba(255,255,255,.055); font-size:19px; }
+    .now-playing-copy { min-width:0; flex:1 1 auto; }
+    .now-playing-copy small { display:block; margin-bottom:3px; color:#80e8f0; font-size:8px; font-weight:900; letter-spacing:1.5px; }
+    .now-playing-copy strong { display:block; overflow:hidden; color:#f5f8ff; font-size:12px; font-weight:800; line-height:1.4; text-overflow:ellipsis; white-space:nowrap; }
+    .now-playing-status { flex:0 0 auto; color:#8192ad; font-size:7px; font-weight:850; letter-spacing:1px; white-space:nowrap; }
+    .player-shell.autodj .now-playing-copy small { color:#dda5ff; }
+    .player-shell.external .now-playing-copy small { color:#8eeaff; }
     .player-note { margin: 18px auto 0; max-width: 760px; color: #8793b3; text-align: center; font-size: 11px; line-height: 1.6; }
     .player-shell::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 71% 44%,rgba(191,55,255,.17),transparent 40%),radial-gradient(ellipse at 25% 52%,rgba(0,217,238,.14),transparent 38%); }
     .player-head { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 1px 16px; border-bottom: 1px solid rgba(255,255,255,.12); }
@@ -509,6 +517,11 @@
             <div class="player-head-actions"><span class="player-icon" title="Élő online adás"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 9a11 11 0 0 1 14 0M8 12a6.5 6.5 0 0 1 8 0m-5 4h2"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></span><span class="player-icon" title="Hanghullám"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10v4m4-8v12m4-16v20m4-15v10m4-8v6"/></svg></span></div>
           </div>
           <div class="player-state-row"><span class="live-label"><i></i><span data-role="play-status">KÉSZEN A LEJÁTSZÁSRA</span></span><div class="listener-counter is-loading" data-listener-counter="live" title="A rádiószerver aktuális hallgatószáma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM20 8v6m3-3h-6"/></svg><span class="listener-counter-copy"><strong class="listener-counter-value" data-listener-value>—</strong><small class="listener-counter-label" data-listener-label>HALLGATÓ</small></span></div><span class="player-quality">ÉLŐ KÖZVETÍTÉS</span></div>
+          <div class="now-playing" data-now-playing="live" aria-live="polite">
+            <span class="now-playing-icon" aria-hidden="true">♫</span>
+            <span class="now-playing-copy"><small>MOST SZÓL</small><strong data-now-playing-value>Zenecím betöltése…</strong></span>
+            <span class="now-playing-status">ÉLŐ ADAT</span>
+          </div>
           <div class="visual-stage">
             <div class="orbit"><span class="orbit-dot"></span></div>
             <div class="waveform" data-role="waveform" aria-hidden="true"></div>
@@ -531,6 +544,11 @@
             <div class="player-head-actions"><span class="player-icon" title="Automatikus zenei adás"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h10m0 0-3-3m3 3-3 3M20 17H10m0 0 3-3m-3 3 3 3"/></svg></span><span class="player-icon" title="Hanghullám"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10v4m4-8v12m4-16v20m4-15v10m4-8v6"/></svg></span></div>
           </div>
           <div class="player-state-row"><span class="live-label"><i></i><span data-role="play-status">KÉSZEN A LEJÁTSZÁSRA</span></span><div class="listener-counter is-loading" data-listener-counter="autodj" title="A rádiószerver aktuális hallgatószáma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM20 8v6m3-3h-6"/></svg><span class="listener-counter-copy"><strong class="listener-counter-value" data-listener-value>—</strong><small class="listener-counter-label" data-listener-label>HALLGATÓ</small></span></div><span class="player-quality">AUTOMATIKUS ZENEI ADÁS</span></div>
+          <div class="now-playing" data-now-playing="autodj" aria-live="polite">
+            <span class="now-playing-icon" aria-hidden="true">♫</span>
+            <span class="now-playing-copy"><small>MOST SZÓL</small><strong data-now-playing-value>Zenecím betöltése…</strong></span>
+            <span class="now-playing-status">ÉLŐ ADAT</span>
+          </div>
           <div class="visual-stage">
             <div class="orbit"><span class="orbit-dot"></span></div>
             <div class="waveform" data-role="waveform" aria-hidden="true"></div>
@@ -555,6 +573,11 @@
             <span class="live-label"><i></i><span>KÖZVETLEN STREAM</span></span>
             <div class="listener-counter is-loading" data-listener-counter="attilaAutoDJ" title="Az Attila rádiószerver aktuális AutoDJ hallgatószáma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM20 8v6m3-3h-6"/></svg><span class="listener-counter-copy"><strong class="listener-counter-value" data-listener-value>—</strong><small class="listener-counter-label" data-listener-label>HALLGATÓ</small></span></div>
             <span class="player-quality">NYILVÁNOS HALLGATOTTSÁG</span>
+          </div>
+          <div class="now-playing" data-now-playing="attilaAutoDJ" aria-live="polite">
+            <span class="now-playing-icon" aria-hidden="true">♫</span>
+            <span class="now-playing-copy"><small>MOST SZÓL</small><strong data-now-playing-value>Zenecím betöltése…</strong></span>
+            <span class="now-playing-status">ÉLŐ ADAT</span>
           </div>
           <div class="visual-stage">
             <div class="orbit"><span class="orbit-dot"></span></div>
@@ -1013,6 +1036,7 @@
       const CONTACT_FUNCTION_URL = `${SUPABASE_PROJECT_URL}/functions/v1/contact-message`;
       const RADIO_STATS_FUNCTION_URL = `${SUPABASE_PROJECT_URL}/functions/v1/radio-stats`;
       const ATTILA_RADIO_STATS_FUNCTION_URL = `${SUPABASE_PROJECT_URL}/functions/v1/radio-stats-attila`;
+      const RADIO_NOW_PLAYING_FUNCTION_URL = `${SUPABASE_PROJECT_URL}/functions/v1/radio-now-playing`;
       const listenerStatsUpdated = document.getElementById('listenerStatsUpdated');
       let listenerStatsInFlight = false;
 
@@ -1094,10 +1118,54 @@
         }
       }
 
+      // Az aktuálisan szóló szám külön, read-only Supabase-funkcióból érkezik.
+      // A korábbi zeneszámokat nem tároljuk és nem jelenítjük meg.
+      let nowPlayingInFlight = false;
+
+      function setNowPlaying(channel, item) {
+        const row = document.querySelector(`[data-now-playing="${channel}"]`);
+        if (!row) return;
+        const value = row.querySelector('[data-now-playing-value]');
+        const available = item && item.available === true;
+        const artist = available && typeof item.artist === 'string' ? item.artist.trim() : '';
+        const title = available && typeof item.title === 'string' ? item.title.trim() : '';
+        const rawTitle = available && typeof item.rawTitle === 'string' ? item.rawTitle.trim() : '';
+        let display = '';
+        if (artist && title) display = `${artist} — ${title}`;
+        else if (title) display = title;
+        else if (rawTitle) display = rawTitle;
+        value.textContent = display || 'A csatorna most nem küld zenecímet';
+        row.title = display || 'A rádiószerver nem közöl aktuális zenecímet.';
+        row.classList.toggle('is-unavailable', !display);
+      }
+
+      async function refreshNowPlaying() {
+        if (nowPlayingInFlight || document.visibilityState === 'hidden') return;
+        nowPlayingInFlight = true;
+        try {
+          const payload = await fetchListenerPayload(RADIO_NOW_PLAYING_FUNCTION_URL, 9000);
+          setNowPlaying('live', payload.live);
+          setNowPlaying('autodj', payload.autodj);
+          setNowPlaying('attilaAutoDJ', payload.attilaAutoDJ);
+        } catch (error) {
+          setNowPlaying('live', null);
+          setNowPlaying('autodj', null);
+          setNowPlaying('attilaAutoDJ', null);
+          console.warn('Az aktuális zeneszám lekérése sikertelen:', error);
+        } finally {
+          nowPlayingInFlight = false;
+        }
+      }
+
       refreshListenerStats();
       window.setInterval(refreshListenerStats, 5000);
+      refreshNowPlaying();
+      window.setInterval(refreshNowPlaying, 10000);
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') refreshListenerStats();
+        if (document.visibilityState === 'visible') {
+          refreshListenerStats();
+          refreshNowPlaying();
+        }
       });
 
       contactForm.addEventListener('submit', async event => {
