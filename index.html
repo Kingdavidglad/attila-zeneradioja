@@ -1183,9 +1183,13 @@
           row.classList.toggle('is-unavailable', false);
         } else {
           value.textContent = channel === 'live'
-            ? 'A LIVE csatorna nem küld zenecímet'
+            ? 'Élő adás – a zenecím jelenleg nem érhető el'
             : 'A zenecím jelenleg nem ellenőrizhető';
-          row.title = item && item.reason ? item.reason : 'Még nem érkezett érvényes zenecím.';
+          row.title = item && item.reason
+            ? item.reason
+            : channel === 'live'
+              ? 'A LIVE közvetítéshez jelenleg nem érkezik zenecím-metaadat.'
+              : 'Még nem érkezett érvényes zenecím.';
           row.classList.toggle('is-unavailable', true);
         }
       }
