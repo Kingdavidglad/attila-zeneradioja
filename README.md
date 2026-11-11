@@ -28,3 +28,4 @@ Az űrlap a nevet, e-mail-címet, telefonszámot és üzenetet külső szolgált
 
 ## Megjegyzés
 A kapcsolatfelvételi e-mail-cím a korábban használt `djattila112@gmail.com`. Ha másik címre kell érkezniük az üzeneteknek, az `index.html` fájlban a `formsubmit.co` végpont mindkét előfordulását cserélni kell.
+<!-- GitHub Pages újraépítés -->
