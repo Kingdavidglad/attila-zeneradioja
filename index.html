@@ -39,7 +39,9 @@
     .nameday-track { display: flex; align-items: center; width: max-content; gap: 72px; animation: nameday-marquee 29s linear infinite; will-change: transform; }
     .nameday-copy { display: block; color: rgba(246,250,255,.91); font-size: 11px; font-weight: 700; letter-spacing: .55px; white-space: nowrap; }
     .nameday-copy strong { color: #fff; font-weight: 900; }
+    .nameday-meta { flex: 0 0 auto; display: flex; align-items: center; gap: 13px; }
     .nameday-date { flex: 0 0 auto; color: #aebbd2; font-size: 9px; font-weight: 700; letter-spacing: .7px; white-space: nowrap; }
+    .nameday-clock { display: inline-flex; align-items: center; min-width: 65px; color: #75f0ed; font-size: 12px; line-height: 1; font-weight: 900; letter-spacing: .8px; font-variant-numeric: tabular-nums; white-space: nowrap; text-shadow: 0 0 13px rgba(48,231,237,.28); }
     @keyframes nameday-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     /* A névnapi futósáv kurzor fölött is folyamatosan mozog. */
     .nameday-bar:hover .nameday-track { animation-play-state: running; }
@@ -410,6 +412,8 @@
       .nameday-copy { font-size: 10px; }
       .nameday-track { gap: 45px; animation-duration: 23s; }
       .nameday-date { display: none; }
+      .nameday-meta { gap: 0; }
+      .nameday-clock { min-width: 59px; font-size: 11px; letter-spacing: .45px; }
       .autoplay-prompt { bottom: 12px; align-items: stretch; flex-direction: column; gap: 11px; padding: 14px; border-radius: 16px; }
       .autoplay-prompt-actions { display: grid; grid-template-columns: 1fr 1fr; }
       .autoplay-prompt button { min-height: 42px; }
@@ -433,7 +437,10 @@
           <span class="nameday-copy" id="namedayTextClone" aria-hidden="true">A mai névnapok betöltése…</span>
         </div>
       </div>
-      <span class="nameday-date" id="namedayDate"></span>
+      <div class="nameday-meta">
+        <span class="nameday-date" id="namedayDate"></span>
+        <time class="nameday-clock" id="siteClock" aria-label="Pontos idő, Budapest">--:--:--</time>
+      </div>
     </div>
   </div>
   <section class="hero" id="home">
@@ -676,6 +683,26 @@
 
   <script>
     (() => {
+      // Folyamatos, 24 órás digitális óra magyarországi időzónával.
+      const siteClock = document.getElementById('siteClock');
+      const siteClockFormatter = new Intl.DateTimeFormat('hu-HU', {
+        timeZone: 'Europe/Budapest',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hourCycle: 'h23'
+      });
+
+      function updateSiteClock() {
+        if (!siteClock) return;
+        const now = new Date();
+        siteClock.textContent = siteClockFormatter.format(now);
+        siteClock.dateTime = now.toISOString();
+      }
+
+      updateSiteClock();
+      window.setInterval(updateSiteClock, 1000);
+
       // Hungarian name days are fetched once per Budapest calendar day and cached locally.
       const NAME_DAY_API = 'https://www.nevinfo.hu/api/v1/ma';
       const NAME_DAY_CACHE_KEY = 'attilaRadioNameDaysV1';
