@@ -600,16 +600,16 @@
             <button class="big-play direct-stream-button" type="button" data-action="play" aria-label="Attila AutoDJ lejátszása" title="Lejátszás az oldalon belül"><svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.8c0-.8.9-1.3 1.6-.9l11 7.1c.6.4.6 1.3 0 1.7l-11 7.1c-.7.4-1.6-.1-1.6-.9V4.8Z"/></svg></button>
           </div>
           <div class="player-foot">
-            <div class="stream-info"><span class="stream-cover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 15V9m4 10V5m4 14V3m4 16V7m4 12v-9"/></svg></span><span><b>KÖZVETLEN AUTODJ</b><small>s02.diazol.hu:8130/stream</small></span></div>
+            <div class="stream-info"><span class="stream-cover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 15V9m4 10V5m4 14V3m4 16V7m4 12v-9"/></svg></span><span><b>KÖZVETLEN AUTODJ</b><small>s02.diazol.hu:8132/stream · HTTPS</small></span></div>
             <label class="volume-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10v4h4l5 4V6l-5 4H4Z"/><path d="M16 9a5 5 0 0 1 0 6m2-9a9 9 0 0 1 0 12"/></svg><input class="volume-slider" type="range" data-role="volume" min="0" max="1" step="0.01" value="0.8" aria-label="Közvetlen AutoDJ hangereje"></label>
             <div class="player-buttons"><button class="round-btn" type="button" data-action="mute" aria-label="Közvetlen AutoDJ némítása"><svg class="mute-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10v4h4l5 4V6l-5 4H4Z"/><path d="m17 9 5 6m0-6-5 6"/></svg></button><button class="round-btn primary" type="button" data-action="play" aria-label="Közvetlen AutoDJ lejátszása"><svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.8c0-.8.9-1.3 1.6-.9l11 7.1c.6.4.6 1.3 0 1.7l-11 7.1c-.7.4-1.6-.1-1.6-.9V4.8Z"/></svg></button></div>
-            <div class="external-stream-note">A lejátszás az oldalon belül, külön böngészőlap megnyitása nélkül indul. A hallgatottságot a nyilvános státuszoldalról kérjük le.</div>
+            <div class="external-stream-note">Biztonságos HTTPS-kapcsolaton, az oldalon belül játszik le. Egyszerre csak egy csatorna szólhat.</div>
           </div>
         </article>
       </div>
       <audio id="liveAudio" preload="none" src="https://s02.diazol.hu:8132/live"></audio>
       <audio id="autodjAudio" preload="none" src="https://s02.diazol.hu:8132/autodj"></audio>
-      <audio id="externalAutoDJAudio" preload="none" src="http://s02.diazol.hu:8130/stream"></audio>
+      <audio id="externalAutoDJAudio" preload="none" src="https://s02.diazol.hu:8132/stream"></audio>
       <p class="player-note">Az oldal megnyitásakor a LIVE adás automatikusan elindulni próbál. Ha a böngésző ezt nem engedélyezi, egy érintéssel elindíthatod bármelyik csatornát. Egyszerre csak az egyik adás szól.</p>
       <p class="player-note" id="listenerStatsUpdated">A hallgatottsági adatok betöltése…</p>
     </div>
@@ -980,7 +980,7 @@
             audio.pause();
             return;
           }
-          // A két csatorna közül egyszerre csak az egyik szóljon, ne keveredjen a két adás.
+          // A csatornák közül egyszerre csak az egyik szóljon, ne keveredjenek az adások.
           for (const other of players) {
             if (other !== player && !other.audio.paused) other.audio.pause();
           }
@@ -1005,7 +1005,7 @@
         audio.addEventListener('ended', () => setPlaying(false));
         audio.addEventListener('error', () => {
           setPlaying(false);
-          showToast(`${name}: nem sikerült kapcsolódni a streamhez. Ellenőrizd a stream elérhetőségét és a HTTPS támogatást.`);
+          showToast(`${name}: a HTTPS stream nem érhető el. Ellenőrizni kell a Diazol 8132-es SSL portját és a /stream végpontot.`);
         });
         volume.addEventListener('input', () => {
           audio.volume = Number(volume.value);
